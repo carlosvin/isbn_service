@@ -1,13 +1,14 @@
-import falcon
-import re
+
 from functools import reduce
+from scrapper import isbn_scrapper
+import json, os, re, falcon
 
 """
 For now we'll only accept 13 digits isbns
 In the future, when we receive 10 digits we will convert it
 """
 
-CONTENT_TYPE = 'json'
+CONTENT_TYPE = 'application/json'
 
 MIN_10=999999999
 MAX_10=9999999999
@@ -43,7 +44,22 @@ class Resource(object):
     def __init__(self, path_name):
         self.path_name = path_name
 
+    def get_path(self, isbn):
+         return os.path.join(self.path_name, '{}.book'.format(isbn))
+
     @falcon.before(get_valid_isbn)
     def on_post(self, req, resp, isbn):
-        resp.status = falcon.HTTP_201
-        resp.location = '/{}/{}'.format(self.path_name, isbn)
+        book = isbn_scrapper.Isbn(isbn).request_book()
+        if book:
+            with open(self.get_path(isbn), 'w') as f:
+                f.write(json.dumps(book.dic))
+            resp.status = falcon.HTTP_201
+            resp.location = '/{}/{}'.format(self.path_name, isbn)
+        else:
+            resp.status = falcon.HTTP_500
+
+    def on_get(self, req, resp, isbn):
+        resp.content_type = CONTENT_TYPE
+        resp.stream = open(self.get_path(isbn), 'rb')
+        resp.stream_len = os.path.getsize(self.get_path(isbn))
+

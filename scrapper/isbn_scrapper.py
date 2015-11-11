@@ -3,11 +3,6 @@ __author__ = 'carlos'
 
 import urllib.request
 import json
-import string
-import re
-import logging
-import html.parser
-import argparse
 import socket
 
 class WsUrl:
@@ -16,16 +11,12 @@ class WsUrl:
     TEMPLATE='https://ajax.googleapis.com/ajax/services/search/web?v=1.0&q={}&userip={}'
     QUERY_TEMPLATE='https://google.com?q={}'
 
-
 FORMATS = ('rst', 'html')
 
 DEFAULT_USER_IP = socket.gethostbyname(socket.gethostname())
 
-HTML_PARSER = html.parser.HTMLParser()
-
 
 class Isbn:
-    RE = re.compile(r'^(\d{13})$')
 
     def __init__(self, number):
         self.number = number
@@ -43,7 +34,7 @@ class Isbn:
     def url_google_q(self):
         return WsUrl.QUERY_TEMPLATE.format(self.number)
 
-    def request_book(self, referer):
+    def request_book(self, referer = DEFAULT_USER_IP):
         request = urllib.request.Request(self.url, None, {'Referer': referer})
         request_img = urllib.request.Request(self.url_img, None, {'Referer': referer})
         with urllib.request.urlopen(request) as f:
@@ -83,3 +74,12 @@ class Book:
 
     def __repr__(self):
         return self.__str__()
+
+    @property
+    def dic(self):
+        return {
+            'isbn': self.isbn.number,
+            'title': self.title,
+            'url': self.url,
+            'img_url': self.img_url
+        }
