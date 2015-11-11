@@ -16,8 +16,6 @@ MAX_13=9999999999999
 
 RE_DIGIT = re.compile("\d+")
 
-valid_range = lambda a, b, n: a < n < b
-
 
 def validate_content_type(req, resp, params):
     if req.content_type != CONTENT_TYPE:
@@ -33,7 +31,7 @@ def get_valid_isbn(req, resp, params):
 
 
 def is_valid(isbn):
-    return valid_range(MIN_13, MAX_13, isbn) or valid_range(MIN_10, MAX_10, isbn)
+    return MIN_10 < isbn < MAX_10 or MIN_13 < isbn < MAX_13
 
 
 def isbn_parse(text):
