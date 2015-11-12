@@ -7,9 +7,11 @@ api = application = falcon.API()
 
 ISBN_PATH_NAME = 'isbns'
 
-isbns = isbns.Resource(ISBN_PATH_NAME)
+isbn_collection = isbns.Collection(ISBN_PATH_NAME)
+isbn = isbns.Resource(ISBN_PATH_NAME)
 
-api.add_route('/{}'.format(ISBN_PATH_NAME), isbns)
+api.add_route('/isbns', isbn_collection)
+api.add_route('/isbns/{isbn}', isbn)
 
 if __name__ == '__main__':
     from wsgiref import simple_server

@@ -39,7 +39,7 @@ def isbn_parse(text):
     return int(reduce(lambda a, b: a + b, filter(lambda c: c.isdigit(), re.findall(RE_DIGIT, text))))
 
 
-class Resource(object):
+class Collection(object):
 
     def __init__(self, path_name):
         self.path_name = path_name
@@ -58,8 +58,16 @@ class Resource(object):
         else:
             resp.status = falcon.HTTP_500
 
+
+class Resource(object):
+
+    def __init__(self, path_name):
+        self.path_name = path_name
+
+    def get_path(self, isbn):
+         return os.path.join(self.path_name, '{}.book'.format(isbn))
+
     def on_get(self, req, resp, isbn):
         resp.content_type = CONTENT_TYPE
         resp.stream = open(self.get_path(isbn), 'rb')
         resp.stream_len = os.path.getsize(self.get_path(isbn))
-
