@@ -4,11 +4,11 @@ machine:
     - docker
 
 dependencies:
-  override:
+  pre:
     - docker build -t carlosvin/isbn_service:$CIRCLE_SHA1 .
 
 test:
-  override:
+  post:
     - docker run -d carlosvin/isbnsrv:$CIRCLE_SHA1 "pypy3 -m unittest discover test "*_test.py""
 
 deployment:
