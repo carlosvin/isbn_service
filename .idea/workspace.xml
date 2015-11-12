@@ -2,10 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bb1cf160-9fa7-4712-82bd-134d1fdbc4d3" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/laguerranotiene.json" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/quijote.json" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/isbn.txt" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scrapper/isbn_scrapper.py" afterPath="$PROJECT_DIR$/scrapper/isbn_scrapper.py" />
     </list>
     <ignored path="isbnsrv.iws" />
@@ -30,8 +26,8 @@
       <file leaf-file-name="isbn_scrapper.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/scrapper/isbn_scrapper.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.028248588">
-              <caret line="11" column="87" selection-start-line="11" selection-start-column="14" selection-end-line="11" selection-end-column="87" />
+            <state vertical-scroll-proportion="0.42372882">
+              <caret line="45" column="0" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -57,9 +53,9 @@
         <option value="$PROJECT_DIR$/format/__init__.py" />
         <option value="$PROJECT_DIR$/rest/srv.py" />
         <option value="$PROJECT_DIR$/rest/isbns.py" />
-        <option value="$PROJECT_DIR$/scrapper/isbn_scrapper.py" />
         <option value="$PROJECT_DIR$/test/laguerranotiene.json" />
         <option value="$PROJECT_DIR$/test/quijote.json" />
+        <option value="$PROJECT_DIR$/scrapper/isbn_scrapper.py" />
       </list>
     </option>
   </component>
@@ -121,7 +117,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="format" />
+              <option name="myItemId" value="test" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -437,28 +433,6 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="python-line">
-          <url>file://$PROJECT_DIR$/rest/isbns.py</url>
-          <line>51</line>
-          <option name="timeStamp" value="15" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="python-line">
-          <url>file://$PROJECT_DIR$/scrapper/isbn_scrapper.py</url>
-          <line>39</line>
-          <option name="timeStamp" value="16" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="python-line">
-          <url>file://$PROJECT_DIR$/scrapper/isbn_scrapper.py</url>
-          <line>63</line>
-          <option name="timeStamp" value="17" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="python-line">
-          <url>file://$PROJECT_DIR$/scrapper/isbn_scrapper.py</url>
-          <line>57</line>
-          <option name="timeStamp" value="18" />
-        </line-breakpoint>
-      </breakpoints>
       <option name="time" value="19" />
     </breakpoint-manager>
     <watches-manager />
@@ -479,7 +453,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="35" column="0" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
           <folding>
-            <element signature="e#24#45#0" expanded="false" />
+            <element signature="e#24#63#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -583,28 +557,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/isbns_test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="5" column="30" selection-start-line="5" selection-start-column="30" selection-end-line="5" selection-end-column="30" />
-          <folding>
-            <element signature="e#0#23#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/.PyCharm50/system/python_stubs/-1247971765/posix.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.54856515">
           <caret line="784" column="8" selection-start-line="784" selection-start-column="4" selection-end-line="784" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/format/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="50" column="116" selection-start-line="50" selection-start-column="116" selection-end-line="50" selection-end-column="116" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -614,16 +570,6 @@
           <caret line="13" column="36" selection-start-line="13" selection-start-column="36" selection-end-line="13" selection-end-column="36" />
           <folding>
             <element signature="e#0#13#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rest/isbns.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="51" column="42" selection-start-line="51" selection-start-column="42" selection-end-line="51" selection-end-column="42" />
-          <folding>
-            <element signature="e#1#29#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -652,10 +598,44 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/test/isbns_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.11299435">
+          <caret line="5" column="30" selection-start-line="5" selection-start-column="30" selection-end-line="5" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rest/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/format/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.8305085">
+          <caret line="50" column="116" selection-start-line="50" selection-start-column="116" selection-end-line="50" selection-end-column="116" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rest/isbns.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33197555">
+          <caret line="38" column="75" selection-start-line="38" selection-start-column="72" selection-end-line="38" selection-end-column="75" />
+          <folding>
+            <element signature="e#1#29#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/scrapper/isbn_scrapper.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.028248588">
-          <caret line="11" column="87" selection-start-line="11" selection-start-column="14" selection-end-line="11" selection-end-column="87" />
+        <state vertical-scroll-proportion="0.42372882">
+          <caret line="45" column="0" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
           <folding />
         </state>
       </provider>

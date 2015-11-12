@@ -1,9 +1,7 @@
 __author__ = 'carlos'
 
 
-import urllib.request
-import json
-import socket
+import urllib.request, json, socket, re
 
 
 class WsUrl:
@@ -52,6 +50,7 @@ class Book:
         self.isbn = isbn
         self.title, self.url = self.extract_data(result['responseData']['results'])
         self.img_url = self.extract_img_url(result_img['responseData']['results'])
+        self.title = re.split(";|\-|\_|\|", self.title, 1)
 
     @staticmethod
     def extract_img_url(result_img):
@@ -62,7 +61,7 @@ class Book:
     @staticmethod
     def extract_data(result):
         if len(result) > 0:
-            return result[0]['title'], result[0]['url']
+            return result[0]['titleNoFormatting'], result[0]['url']
         return None, None
 
     def __str__(self):
