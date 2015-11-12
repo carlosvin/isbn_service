@@ -4,7 +4,7 @@ machine:
     - docker
 
 dependencies:
-  pre:
+  override:
     - docker build -t carlosvin/isbn_service:$CIRCLE_SHA1 .
 
 test:
