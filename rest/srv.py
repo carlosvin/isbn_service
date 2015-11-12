@@ -5,10 +5,10 @@ from rest import isbns
 
 api = application = falcon.API()
 
-ISBN_PATH_NAME = 'isbns'
+storage = {}
 
-isbn_collection = isbns.Collection(ISBN_PATH_NAME)
-isbn = isbns.Resource(ISBN_PATH_NAME)
+isbn_collection = isbns.Collection(storage)
+isbn = isbns.Resource(storage)
 
 api.add_route('/isbns', isbn_collection)
 api.add_route('/isbns/{isbn}', isbn)

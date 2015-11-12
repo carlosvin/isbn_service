@@ -1,7 +1,7 @@
 
 from functools import reduce
 from scrapper import isbn_scrapper
-import json, os, re, falcon
+import json, re, falcon, io
 
 """
 For now we'll only accept 13 digits isbns
@@ -24,11 +24,18 @@ def validate_content_type(req, resp, params):
 
 
 def get_valid_isbn(req, resp, params):
-    isbn = isbn_parse(str(req.stream.read(32)))
+    isbn = get_isbn_input(req, params)
     if is_valid(isbn):
         params['isbn'] = isbn
     else:
         raise falcon.HTTPBadRequest('Bad request', 'Invalid ISBN {}'.format(isbn))
+
+
+def get_isbn_input(req, params):
+    if params and params['isbn']:
+        return isbn_parse(params['isbn'])
+    else:
+        return isbn_parse(str(req.stream.read(32)))
 
 
 def is_valid(isbn):
@@ -41,33 +48,26 @@ def isbn_parse(text):
 
 class Collection(object):
 
-    def __init__(self, path_name):
-        self.path_name = path_name
-
-    def get_path(self, isbn):
-         return os.path.join(self.path_name, '{}.book'.format(isbn))
+    def __init__(self, storage):
+        self.storage = storage
 
     @falcon.before(get_valid_isbn)
     def on_post(self, req, resp, isbn):
         book = isbn_scrapper.Isbn(isbn).request_book()
         if book:
-            with open(self.get_path(isbn), 'w') as f:
-                f.write(json.dumps(book.dic))
+            self.storage[isbn] = json.dumps(book.dic)
             resp.status = falcon.HTTP_201
-            resp.location = '/{}/{}'.format(self.path_name, isbn)
+            resp.location = '{}/{}'.format(req.path, isbn)
         else:
             resp.status = falcon.HTTP_500
 
 
 class Resource(object):
 
-    def __init__(self, path_name):
-        self.path_name = path_name
+    def __init__(self, storage):
+        self.storage = storage
 
-    def get_path(self, isbn):
-         return os.path.join(self.path_name, '{}.book'.format(isbn))
-
+    @falcon.before(get_valid_isbn)
     def on_get(self, req, resp, isbn):
         resp.content_type = CONTENT_TYPE
-        resp.stream = open(self.get_path(isbn), 'rb')
-        resp.stream_len = os.path.getsize(self.get_path(isbn))
+        resp.body = self.storage[isbn]
