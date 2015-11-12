@@ -8,7 +8,7 @@ dependencies:
     - docker build -t carlosvin/isbn_service:$CIRCLE_SHA1 .
 
 test:
-  post:
+  override:
     - docker run -d carlosvin/isbnsrv:$CIRCLE_SHA1 "pypy3 -m unittest discover test "*_test.py""
 
 deployment:
@@ -16,4 +16,4 @@ deployment:
     branch: master
     commands:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-      - docker push carlosvin/isbn_service:$CIRCLE_SHA1
+      - docker push carlosvin/isbn_service
