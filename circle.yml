@@ -9,7 +9,7 @@ dependencies:
 
 test:
   post:
-    - docker run -d -p pypy3 -m unittest discover test "*_test.py"
+    - docker run -d -p 'pypy3 -m unittest discover test "*_test.py"'
 
 deployment:
   hub:
