@@ -9,7 +9,7 @@ dependencies:
 
 test:
   post:
-    - docker docker run -d carlosvin/isbnsrv:$CIRCLE_SHA1 "pypy3 -m unittest discover test "*_test.py""
+    - docker run -d carlosvin/isbnsrv:$CIRCLE_SHA1 "pypy3 -m unittest discover test "*_test.py""
 
 deployment:
   hub:
