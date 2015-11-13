@@ -1,5 +1,7 @@
 # circle.yml
 machine:
+  python:
+    version: pypy-4.0.0
   services:
     - docker
 
@@ -9,7 +11,7 @@ dependencies:
 
 test:
   post:
-    - docker run -i -t --entrypoint=./test.sh carlosvin/isbn_service:$CIRCLE_SHA1 
+    - docker run -i -t --entrypoint=./test.sh carlosvin/isbn_service:$CIRCLE_SHA1
 
 deployment:
   hub:
