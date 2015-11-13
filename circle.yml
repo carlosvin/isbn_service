@@ -14,7 +14,7 @@ test:
 
 deployment:
   hub:
-    branch: master
+    branch: docker-16
     commands:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       - docker push carlosvin/isbn_service
