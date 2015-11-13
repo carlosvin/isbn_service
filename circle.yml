@@ -1,7 +1,5 @@
 # circle.yml
 machine:
-  python:
-    version: pypy-2.2.1
   services:
     - docker
 
@@ -11,9 +9,7 @@ dependencies:
     - docker build -t carlosvin/isbn_service:$CIRCLE_SHA1 .
 
 test:
-  pre:
-    -
-  post:
+  override:
     - docker run -i -t --entrypoint=./test.sh carlosvin/isbn_service:$CIRCLE_SHA1
 
 deployment:
