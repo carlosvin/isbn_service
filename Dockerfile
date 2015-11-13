@@ -5,10 +5,8 @@ MAINTAINER Carlos Martin <carlosvin@gmail.com>
 
 WORKDIR /isbn_service
 ADD . .
+RUN chmod +x ./test.sh
 RUN pip install -r requirements.txt
 RUN pypy3 -m unittest discover test "*_test.py"
 
-VOLUME ["/data"]
-WORKDIR /data
-
-ENTRYPOINT gunicorn /isbn_service/rest.srv
+ENTRYPOINT gunicorn rest.srv
