@@ -1,14 +1,13 @@
 
 from functools import reduce
 from scrapper import isbn_scrapper
+from format import types
 import json, re, falcon, io
 
 """
 For now we'll only accept 13 digits isbns
 In the future, when we receive 10 digits we will convert it
 """
-
-CONTENT_TYPE = 'application/json'
 
 MIN_10=999999999
 MAX_10=9999999999
@@ -18,9 +17,10 @@ MAX_13=9999999999999
 RE_DIGIT = re.compile("\d+")
 
 
-def validate_content_type(req, resp, params):
-    if req.content_type != CONTENT_TYPE:
-        raise falcon.HTTPBadRequest('Bad request', 'Content type {} not allowed, expected {}'.format(req.content_type, CONTENT_TYPE))
+def get_formatter(req, resp, params):
+    if req.content_type not in types.FORMATTERS:
+        raise falcon.HTTPBadRequest('Bad request', 'Content type {} not allowed, expected {}'.format(req.content_type, types.FORMATTERS.keys()))
+    params['formatter']=types.FORMATTERS[req.content_type]
 
 
 def get_valid_isbn(req, resp, params):
@@ -55,8 +55,8 @@ class Collection(object):
     def on_post(self, req, resp, isbn):
         book = isbn_scrapper.Isbn(isbn).request_book()
         if book:
-            self.storage[isbn] = json.dumps(book.dic)
-            resp.status = falcon.HTTP_201
+            self.storage[isbn] = book
+            resp.status = falcon.HTTP_CREATED
             resp.location = '{}/{}'.format(req.path, isbn)
         else:
             resp.status = falcon.HTTP_500
@@ -68,6 +68,19 @@ class Resource(object):
         self.storage = storage
 
     @falcon.before(get_valid_isbn)
-    def on_get(self, req, resp, isbn):
-        resp.content_type = CONTENT_TYPE
-        resp.body = self.storage[isbn]
+    @falcon.before(get_formatter)
+    def on_get(self, req, resp, isbn, formatter):
+        resp.content_type = req.content_type
+        if isbn in self.storage:
+            resp.body = formatter.format(self.storage[isbn])
+            resp.status = falcon.HTTP_OK
+        else:
+            resp.status = falcon.HTTP_NOT_FOUND
+
+
+    @falcon.before(get_valid_isbn)
+    def on_put(self, req, resp, isbn):
+        if isbn in self.storage:
+            resp.status = falcon.HTTP_OK
+        else:
+            resp.status = falcon.HTTP_NOT_FOUND

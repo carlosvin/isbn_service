@@ -1,51 +1,53 @@
+import json
 
 IMG_WIDTH = 480
 HEADER_N = 3
 
+
 class RstFormatter:
 
-    def __init__(self, book):
-        self.book = book
-
-    def __str__(self):
+    def format(self, book):
         return """
         `{}`_
         {}
         .. _`{}`: {}
-        """.format(self.book.title, self.img, self.book.title, self.book.url)
+        """.format(book.title, self.img(book), book.title, book.url)
 
-    @property
-    def img(self):
+    def img(self, book):
         return """
         .. image:: {}
-   		:width: {} px
-   		:alt: {}
-   		:align: center
-        """.format(self.book.img_url, IMG_WIDTH, self.book.title)
+        :width: {} px
+        :alt: {}
+        :align: center
+        """.format(book.img_url, IMG_WIDTH, book.title)
 
-    def __repr__(self):
-        return self.__str__()
 
 class HtmlFormatter:
 
-    def __init__(self, book):
-        self.book = book
-
-    def __str__(self):
+    def format(self, book):
         return """
-        <p><a href="{}">{}</a><br>ISBN:<a href="{}">{}<a/><br><img src="{}" width="{}"/></p>
-        """.format(self.book.url_google_q, self.book.isbn, self.book.title, self.img_url, IMG_WIDTH)
+<p class="book">
+    <a href="{}">{}</a><br>
+    ISBN:<a href="{}">{}<a/><br>
+    <img src="{}" width="{}"/>
+</p>
+        """.format(book.url, book.title, book.url, book.isbn.number, book.img_url, IMG_WIDTH)
+
 
 class BookNikolaFormatter:
 
-    def __init__(self, book):
-        self.book = book
-
-    def __str__(self):
+    def format(self, book):
         return """
 .. book_figure:: {}
     :class: book-figure
     :url: {}
     :isbn_{}: {}
     :image_url: {}
-	""".format(self.book.title, self.book.url, len(self.book.isbn.number), self.book.isbn.number, self.book.img_url)
+        """.format(book.title, book.url, len(book.isbn), book.isbn.number, book.img_url)
+
+
+
+class JsonFormatter:
+
+    def format(self, book):
+        return json.dump(book.dic)

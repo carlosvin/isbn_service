@@ -20,6 +20,7 @@ class Isbn:
 
     def __init__(self, number):
         self.number = number
+        self.len = len(str(number))
 
 
     @property
@@ -42,6 +43,9 @@ class Isbn:
         with urllib.request.urlopen(request_img) as f:
             result_img = json.loads(f.readall().decode('utf-8'))
         return Book(self, result, result_img)
+
+    def __len__(self):
+        return self.len
 
 
 class Book:
