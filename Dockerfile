@@ -7,6 +7,5 @@ WORKDIR /isbn_service
 ADD . .
 RUN chmod +x ./test.sh
 RUN pip install -r requirements.txt
-RUN pypy3 -m unittest discover test "*_test.py"
 
 ENTRYPOINT gunicorn rest.srv
