@@ -61,6 +61,12 @@ class Collection(object):
         else:
             resp.status = falcon.HTTP_500
 
+    def on_get(self, req, resp):
+        resp.status = falcon.HTTP_OK
+        astr = ''
+        for v in self.storage.values():
+            astr += json.dumps(v.dic)
+        resp.body = astr
 
 class Resource(object):
 
