@@ -6,7 +6,7 @@ machine:
 dependencies:
   override:
     - pip install requests
-    - docker build -t carlosvin/isbn_service:$CIRCLE_SHA1 .
+    - docker build -t carlosvin/isbn_service:$CIRCLE_SHA1 src
 
 test:
   override:
