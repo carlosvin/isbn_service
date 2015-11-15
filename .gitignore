@@ -7,4 +7,4 @@ build/
 packages/
 web/packages
 *.lock
-fe/web/packages
+**/packages
