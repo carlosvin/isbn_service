@@ -1,11 +1,11 @@
 isbn_service1:
   restart: always
-  build: .
+  build: src
   links:
     - redis
   expose:
     - "8000"
-  command: /usr/local/bin/gunicorn rest.srv -w 2 -b :8000
+  command: gunicorn rest.srv -w 2 -b :8000
 
 nginx:
   restart: always
