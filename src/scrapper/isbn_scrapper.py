@@ -7,7 +7,7 @@ import urllib.request, json, socket, re
 class WsUrl:
 
     IMG_TEMPLATE='https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q={}&userip={}'
-    TEMPLATE='https://ajax.googleapis.com/ajax/services/search/fe?v=1.0&q={}&userip={}'
+    TEMPLATE='https://ajax.googleapis.com/ajax/services/search/web?v=1.0&q={}&userip={}'
     QUERY_TEMPLATE='https://google.com?q={}'
 
 
