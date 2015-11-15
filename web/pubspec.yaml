@@ -14,5 +14,3 @@ transformers:
     entry_points:
     - web/index.dart
 
-- $dart2js:
-    $include: '**/*.bootstrap.initialize.dart'

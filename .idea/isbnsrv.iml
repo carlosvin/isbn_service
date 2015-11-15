@@ -6,10 +6,10 @@
       <excludeFolder url="file://$MODULE_DIR$/.idea" />
       <excludeFolder url="file://$MODULE_DIR$/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
-      <excludeFolder url="file://$MODULE_DIR$/fe/.pub" />
-      <excludeFolder url="file://$MODULE_DIR$/fe/build" />
+      <excludeFolder url="file://$MODULE_DIR$/web/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/web/build" />
       <excludeFolder url="file://$MODULE_DIR$/fe/packages" />
-      <excludeFolder url="file://$MODULE_DIR$/fe/web/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/web/web/packages" />
       <excludeFolder url="file://$MODULE_DIR$/packages" />
       <excludeFolder url="file://$MODULE_DIR$/test/packages" />
     </content>
