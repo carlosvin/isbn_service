@@ -1,8 +1,11 @@
-
+import json
+import re
 from functools import reduce
-from scrapper import isbn_scrapper
+
+import falcon
+
 from format import types
-import json, re, falcon, io
+from scrapper import isbn_scrapper
 
 """
 For now we'll only accept 13 digits isbns
@@ -18,10 +21,12 @@ RE_DIGIT = re.compile("\d+")
 
 
 def get_formatter(req, resp, params):
-    if req.content_type not in types.FORMATTERS:
+    if req.content_type and req.content_type not in types.FORMATTERS:
         raise falcon.HTTPBadRequest('Bad request', 'Content type {} not allowed, expected {}'.format(req.content_type, types.FORMATTERS.keys()))
-    params['formatter']=types.FORMATTERS[req.content_type]
-
+    if req.content_type:
+        params['formatter']= types.FORMATTERS[req.content_type]
+    else:
+        params['formatter']= types.FORMATTERS[types.JSON]
 
 def get_valid_isbn(req, resp, params):
     isbn = get_isbn_input(req, params)

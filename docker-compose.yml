@@ -1,0 +1,16 @@
+nginx:
+    build: ./nginx
+    links:
+        - isbn_service1:isbn_service1
+    ports:
+        - "80:80"
+isbn_service1:
+    build: .
+    links:
+        - redis
+    ports:
+        - "8000"
+redis:
+    image: redis
+    ports:
+        - "6379"

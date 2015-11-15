@@ -1,5 +1,8 @@
-import unittest, random
-from rest.isbns import isbn_parse, is_valid
+import random
+import unittest
+
+from rest import isbn_parse, is_valid
+
 
 class TestIsbn(unittest.TestCase):
 

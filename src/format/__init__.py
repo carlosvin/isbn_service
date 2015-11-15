@@ -50,4 +50,4 @@ class BookNikolaFormatter:
 class JsonFormatter:
 
     def format(self, book):
-        return json.dump(book.dic)
+        return json.dumps(book.dic)
