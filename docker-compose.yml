@@ -1,16 +1,22 @@
-nginx:
-    build: ./nginx
-    links:
-        - isbn_service1:isbn_service1
-    ports:
-        - "80:80"
 isbn_service1:
-    build: .
-    links:
-        - redis
-    ports:
-        - "8000"
+  restart: always
+  build: .
+  links:
+    - redis
+  expose:
+    - "8000"
+  command: /usr/local/bin/gunicorn rest.srv -w 2 -b :8000
+
+nginx:
+  restart: always
+  build: nginx
+  links:
+    - isbn_service1:isbn_service1
+  ports:
+    - "80:80"
+
 redis:
-    image: redis
-    ports:
-        - "6379"
+  restart: always
+  image: redis:latest
+  ports:
+    - "6379:6379"

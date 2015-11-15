@@ -8,4 +8,4 @@ ADD src/ .
 
 RUN pip install -r requirements.txt
 
-ENTRYPOINT gunicorn rest.srv
+#ENTRYPOINT gunicorn rest.srv
