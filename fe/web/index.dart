@@ -12,7 +12,7 @@ main() async {
 void loadData() {
   var url = "http://localhost:8000/isbns";
 
-  // call the web server asynchronously
+  // call the fe server asynchronously
   var request = HttpRequest.getString(url).then(onDataLoaded);
 }
 

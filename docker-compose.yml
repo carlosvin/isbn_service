@@ -11,12 +11,21 @@ nginx:
   restart: always
   build: nginx
   links:
+    - fe:fe
     - isbn_service1:isbn_service1
   ports:
     - "80:80"
+  volumes_from:
+        - fe
 
 redis:
   restart: always
   image: redis:latest
   ports:
     - "6379:6379"
+
+fe:
+  build: fe
+  volumes:
+        - /usr/share/fe
+  command: tail -f /dev/null

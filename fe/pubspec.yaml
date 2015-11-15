@@ -10,7 +10,6 @@ transformers:
 - web_components:
     entry_points:
     - web/index.html
-
 - reflectable:
     entry_points:
     - web/index.dart
