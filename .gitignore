@@ -1,5 +1,6 @@
 .idea/
 *.pyc
-.packages/
+.packages
 .pub/
 **/__pycache__/
+build/
