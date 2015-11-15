@@ -36,12 +36,12 @@ class Isbn:
         return WsUrl.QUERY_TEMPLATE.format(self.number)
 
     def request_book(self, referer = DEFAULT_USER_IP):
-        request = urllib.request.Request(self.url, None, {'Referer': referer})
-        request_img = urllib.request.Request(self.url_img, None, {'Referer': referer})
+        request = urllib.request.Request(self.url, headers={'Referer': referer})
+        request_img = urllib.request.Request(self.url_img, headers={'Referer': referer})
         with urllib.request.urlopen(request) as f:
-            result = json.loads(f.readall().decode('utf-8'))
+            result = json.loads(f.read().decode('utf-8'))
         with urllib.request.urlopen(request_img) as f:
-            result_img = json.loads(f.readall().decode('utf-8'))
+            result_img = json.loads(f.read().decode('utf-8'))
         return Book(self, result, result_img)
 
     def __len__(self):
