@@ -4,3 +4,6 @@
 .pub/
 **/__pycache__/
 build/
+packages/
+web/packages/
+*.lock
