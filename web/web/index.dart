@@ -10,7 +10,7 @@ main() async {
 }
 
 void loadData() {
-  var url = "http://localhost/isbns";
+  var url = "http://localhost/rest/isbns";
 
   querySelector('#info').text = url;
 
@@ -25,10 +25,13 @@ void loadData() {
 
 // print the raw json response text from the server
 void onDataLoaded(String responseText) {
+  print(responseText);
+
   querySelector('#info').text = responseText;
 
   Map parsedMap = JSON.decode(responseText);
-  //BookElement book = (BookElement)querySelector('#book');
-  //book.color = parsedMap['title'];
+  BookElement book = querySelector('#book');
+  book.color = parsedMap['title'];
+  book.isbn = parsedMap['isbn'];
 
 }

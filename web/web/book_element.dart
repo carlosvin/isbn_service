@@ -7,6 +7,7 @@ import 'package:polymer/polymer.dart';
 @PolymerRegister('book-element')
 class BookElement extends PolymerElement {
   @property String color = 'red';
+  @property String isbn;
 
   BookElement.created() : super.created();
 }
