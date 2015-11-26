@@ -28,6 +28,7 @@ def get_formatter(req, resp, params):
     else:
         params['formatter']= types.FORMATTERS[types.JSON]
 
+
 def get_valid_isbn(req, resp, params):
     isbn = get_isbn_input(req, params)
     if is_valid(isbn):
@@ -48,7 +49,17 @@ def is_valid(isbn):
 
 
 def isbn_parse(text):
-    return int(reduce(lambda a, b: a + b, filter(lambda c: c.isdigit(), re.findall(RE_DIGIT, text))))
+    try:
+        return int(
+            reduce(
+                lambda a, b: a + b,
+                filter(
+                    lambda c: c.isdigit(), re.findall(RE_DIGIT, text)
+                )
+            )
+        )
+    except TypeError as e:
+        raise Exception(e, text)
 
 
 class Collection(object):
@@ -72,6 +83,7 @@ class Collection(object):
         for v in self.storage.values():
             astr += json.dumps(v.dic)
         resp.body = astr
+
 
 class Resource(object):
 
