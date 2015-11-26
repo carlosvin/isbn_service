@@ -31,7 +31,7 @@ void onDataLoaded(String responseText) {
 
   Map parsedMap = JSON.decode(responseText);
   BookElement book = querySelector('#book');
-  book.color = parsedMap['title'];
+  book.title = parsedMap['title'];
   book.isbn = parsedMap['isbn'];
 
 }

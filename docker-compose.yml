@@ -27,5 +27,5 @@ redis:
 web:
   build: web
   volumes:
-    - /usr/share/isbn/web
+    - /usr/share/isbn
   command: tail -f /dev/null

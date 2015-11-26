@@ -8,3 +8,5 @@ ADD . .
 
 RUN pub upgrade
 RUN pub build --mode=release --all --output=/usr/share/isbn
+
+RUN rm -rf *

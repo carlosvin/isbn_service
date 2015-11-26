@@ -10,7 +10,7 @@ dependencies:
 
 test:
   override:
-    - docker run -i -t --entrypoint=./src/test.sh carlosvin/isbn_service:$CIRCLE_SHA1
+    - docker run -i -t --entrypoint=./test.sh carlosvin/isbn_service:$CIRCLE_SHA1
 
 deployment:
   hub:
