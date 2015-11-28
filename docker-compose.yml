@@ -1,31 +1,29 @@
+#redis:
+#  restart: always
+#  image: redis:latest
+#  ports:
+#    - "6379:6379"
+
 isbn_service1:
-  restart: always
   build: src
-  links:
-    - redis
+  #links:
+  #  - redis
   expose:
     - "8000"
   command: gunicorn rest.srv -w 2 -b :8000
 
-nginx:
-  restart: always
-  build: nginx
-  links:
-    - web:web
-    - isbn_service1:isbn_service1
-  ports:
-    - "80:80"
-  volumes_from:
-        - web
-
-redis:
-  restart: always
-  image: redis:latest
-  ports:
-    - "6379:6379"
-
 web:
   build: web
   volumes:
-    - /usr/share/isbn
+    - /usr/share/isbn/
   command: tail -f /dev/null
+
+nginx:
+  build: nginx
+  links:
+    - isbn_service1:isbn_service1
+    - web:web
+  ports:
+    - "80:80"
+  volumes_from:
+    - web
