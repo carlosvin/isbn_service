@@ -1,3 +1,4 @@
+export 'package:polymer/init.dart';
 import 'package:polymer/polymer.dart';
 import 'book_element.dart';
 import 'dart:html';
