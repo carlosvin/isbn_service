@@ -1,14 +1,12 @@
 __author__ = 'carlos'
 
-
 import urllib.request, json, socket, re
 
 
 class WsUrl:
-
-    IMG_TEMPLATE='https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q={}&userip={}'
-    TEMPLATE='https://ajax.googleapis.com/ajax/services/search/web?v=1.0&q={}&userip={}'
-    QUERY_TEMPLATE='https://google.com?q={}'
+    IMG_TEMPLATE = 'https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q={}&userip={}'
+    TEMPLATE = 'https://ajax.googleapis.com/ajax/services/search/web?v=1.0&q={}&userip={}'
+    QUERY_TEMPLATE = 'https://google.com?q={}'
 
 
 FORMATS = ('rst', 'html')
@@ -17,11 +15,9 @@ DEFAULT_USER_IP = socket.gethostbyname(socket.gethostname())
 
 
 class Isbn:
-
     def __init__(self, number):
         self.number = number
         self.len = len(str(number))
-
 
     @property
     def url_img(self):
@@ -35,7 +31,7 @@ class Isbn:
     def url_google_q(self):
         return WsUrl.QUERY_TEMPLATE.format(self.number)
 
-    def request_book(self, referer = DEFAULT_USER_IP):
+    def request_book(self, referer=DEFAULT_USER_IP):
         request = urllib.request.Request(self.url, headers={'Referer': referer})
         request_img = urllib.request.Request(self.url_img, headers={'Referer': referer})
         with urllib.request.urlopen(request) as f:
@@ -49,22 +45,30 @@ class Isbn:
 
 
 class Book:
+    K1 = 'responseData'
+    K2 = 'results'
 
-    def __init__(self,isbn, result, result_img):
+    def __init__(self, isbn, result, result_img):
         self.isbn = isbn
-        self.title, self.url = self.extract_data(result['responseData']['results'])
-        self.img_url = self.extract_img_url(result_img['responseData']['results'])
+        self.title, self.url = self.extract_data(Book.get_response(result))
+        self.img_url = self.extract_img_url(Book.get_response(result_img))
         self.title = re.split(";|\-|\_|\|", self.title, 1)
 
     @staticmethod
+    def get_response(r):
+        if Book.K1 in r and Book.K2 in r[Book.K1]:
+            return r[Book.K1][Book.K2]
+        return None
+
+    @staticmethod
     def extract_img_url(result_img):
-        if len(result_img) > 0:
+        if result_img and len(result_img) > 0:
             return result_img[0]['url']
         return None
 
     @staticmethod
     def extract_data(result):
-        if len(result) > 0:
+        if result and len(result) > 0:
             return result[0]['titleNoFormatting'], result[0]['url']
         return None, None
 

@@ -5,7 +5,6 @@ HEADER_N = 3
 
 
 class RstFormatter:
-
     def format(self, book):
         return """
         `{}`_
@@ -13,7 +12,8 @@ class RstFormatter:
         .. _`{}`: {}
         """.format(book.title, self.img(book), book.title, book.url)
 
-    def img(self, book):
+    @staticmethod
+    def img(book):
         return """
         .. image:: {}
         :width: {} px
@@ -23,8 +23,8 @@ class RstFormatter:
 
 
 class HtmlFormatter:
-
-    def format(self, book):
+    @staticmethod
+    def format(book):
         return """
 <p class="book">
     <a href="{}">{}</a><br>
@@ -35,8 +35,8 @@ class HtmlFormatter:
 
 
 class BookNikolaFormatter:
-
-    def format(self, book):
+    @staticmethod
+    def format(book):
         return """
 .. book_figure:: {}
     :class: book-figure
@@ -46,8 +46,7 @@ class BookNikolaFormatter:
         """.format(book.title, book.url, len(book.isbn), book.isbn.number, book.img_url)
 
 
-
 class JsonFormatter:
-
-    def format(self, book):
+    @staticmethod
+    def format(book):
         return json.dumps(book.dic)

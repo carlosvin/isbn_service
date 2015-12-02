@@ -5,20 +5,25 @@
 #    - "6379:6379"
 
 isbn_service1:
+  restart: always
   build: src
   #links:
   #  - redis
   expose:
     - "8000"
-  command: gunicorn rest.srv -w 2 -b :8000
+  command: "gunicorn rest.srv -w 2 -b :8000 --pythonpath /usr/isbn"
+  volumes:
+    - .:/usr/isbn
 
 web:
+  restart: always
   build: web
   volumes:
     - /usr/share/isbn/
   command: tail -f /dev/null
 
 nginx:
+  restart: always
   build: nginx
   links:
     - isbn_service1:isbn_service1

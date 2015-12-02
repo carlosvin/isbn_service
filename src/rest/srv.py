@@ -1,5 +1,4 @@
 import falcon
-
 from rest import isbns
 
 api = application = falcon.API()
