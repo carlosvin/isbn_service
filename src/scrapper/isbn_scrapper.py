@@ -50,26 +50,28 @@ class Book:
 
     def __init__(self, isbn, result, result_img):
         self.isbn = isbn
-        self.title, self.url = self.extract_data(Book.get_response(result))
+        tmp_title, self.url = self.extract_data(Book.get_response(result))
         self.img_url = self.extract_img_url(Book.get_response(result_img))
-        self.title = re.split(";|\-|\_|\|", self.title, 1)
+        self.title = re.split(";|\-|\_|\|", tmp_title, 1)
 
     @staticmethod
     def get_response(r):
-        if Book.K1 in r and Book.K2 in r[Book.K1]:
-            return r[Book.K1][Book.K2]
+        if r and (Book.K1 in r.keys()):
+            if r[Book.K1] and (Book.K2 in r[Book.K1].keys()):
+                if (len(r[Book.K1][Book.K2]) > 0):
+                    return r[Book.K1][Book.K2][0]
         return None
 
     @staticmethod
     def extract_img_url(result_img):
-        if result_img and len(result_img) > 0:
-            return result_img[0]['url']
+        if result_img:
+            return result_img['url']
         return None
 
     @staticmethod
     def extract_data(result):
-        if result and len(result) > 0:
-            return result[0]['titleNoFormatting'], result[0]['url']
+        if result:
+            return result['titleNoFormatting'], result['url']
         return None, None
 
     def __str__(self):
