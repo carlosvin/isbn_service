@@ -4,8 +4,8 @@ import urllib.request, json, socket, re
 
 
 class WsUrl:
-    IMG_TEMPLATE = 'https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q={}&userip={}'
-    TEMPLATE = 'https://ajax.googleapis.com/ajax/services/search/web?v=1.0&q={}&userip={}'
+    IMG_TEMPLATE = 'https://www.googleapis.com/customsearch/v1?q={}&searchType=image'
+    TEMPLATE = 'https://www.googleapis.com/customsearch/v1?q={}'
     QUERY_TEMPLATE = 'https://google.com?q={}'
 
 
@@ -45,8 +45,6 @@ class Isbn:
 
 
 class Book:
-    K1 = 'responseData'
-    K2 = 'results'
 
     def __init__(self, isbn, result, result_img):
         self.isbn = isbn
@@ -55,23 +53,21 @@ class Book:
         self.title = re.split(";|\-|\_|\|", tmp_title, 1)
 
     @staticmethod
-    def get_response(r):
-        if r and (Book.K1 in r.keys()):
-            if r[Book.K1] and (Book.K2 in r[Book.K1].keys()):
-                if (len(r[Book.K1][Book.K2]) > 0):
-                    return r[Book.K1][Book.K2][0]
+    def get_response(r) -> dict:
+        if r and 'items' in r and len(r['items']) > 0:
+            return r['items'][0]
         return None
 
     @staticmethod
-    def extract_img_url(result_img):
+    def extract_img_url(result_img) -> str:
         if result_img:
-            return result_img['url']
+            return result_img['thumbnailLink']
         return None
 
     @staticmethod
-    def extract_data(result):
+    def extract_data(result) -> tuple:
         if result:
-            return result['titleNoFormatting'], result['url']
+            return result['title'], result['displayLink']
         return None, None
 
     def __str__(self):
