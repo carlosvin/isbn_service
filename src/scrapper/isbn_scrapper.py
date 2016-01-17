@@ -2,91 +2,70 @@ __author__ = 'carlos'
 
 import urllib.request, json, socket, re
 
-
-class WsUrl:
-    IMG_TEMPLATE = 'https://www.googleapis.com/customsearch/v1?q={}&searchType=image'
-    TEMPLATE = 'https://www.googleapis.com/customsearch/v1?q={}'
-    QUERY_TEMPLATE = 'https://google.com?q={}'
-
+API_TEMPLATE = 'https://openlibrary.org/api/books?bibkeys=ISBN:{isbn}&format=json&jscmd=data'
 
 FORMATS = ('rst', 'html')
 
-DEFAULT_USER_IP = socket.gethostbyname(socket.gethostname())
-
-
 class Isbn:
+
+    KEY_TEMPLATE = 'ISBN:{isbn}'
+
     def __init__(self, number):
         self.number = number
         self.len = len(str(number))
 
     @property
-    def url_img(self):
-        return WsUrl.IMG_TEMPLATE.format(self.number, DEFAULT_USER_IP)
+    def ws_url(self):
+        return API_TEMPLATE.format(isbn=self.number)
 
     @property
-    def url(self):
-        return WsUrl.TEMPLATE.format(self.number, DEFAULT_USER_IP)
+    def ws_key(self):
+        return self.KEY_TEMPLATE.format(isbn=self.number)
 
-    @property
-    def url_google_q(self):
-        return WsUrl.QUERY_TEMPLATE.format(self.number)
-
-    def request_book(self, referer=DEFAULT_USER_IP):
-        request = urllib.request.Request(self.url, headers={'Referer': referer})
-        request_img = urllib.request.Request(self.url_img, headers={'Referer': referer})
+    def request_book(self):
+        request = urllib.request.Request(self.ws_url)
         with urllib.request.urlopen(request) as f:
             result = json.loads(f.read().decode('utf-8'))
-        with urllib.request.urlopen(request_img) as f:
-            result_img = json.loads(f.read().decode('utf-8'))
-        return Book(self, result, result_img)
+        if result:
+            return Book(self, result[self.ws_key])
+        else:
+            return None
 
     def __len__(self):
         return self.len
 
 
+class Author:
+
+    def __init__(self, data_dict):
+        self.name = data_dict['name']
+        self.url = data_dict['url']
+
+
 class Book:
 
-    def __init__(self, isbn, result, result_img):
+    def __init__(self, isbn, result):
         self.isbn = isbn
-        tmp_title, self.url = self.extract_data(Book.get_response(result))
-        self.img_url = self.extract_img_url(Book.get_response(result_img))
-        self.title = re.split(";|\-|\_|\|", tmp_title, 1)
-
-    @staticmethod
-    def get_response(r) -> dict:
-        if r and 'items' in r and len(r['items']) > 0:
-            return r['items'][0]
-        return None
-
-    @staticmethod
-    def extract_img_url(result_img) -> str:
-        if result_img:
-            return result_img['thumbnailLink']
-        return None
-
-    @staticmethod
-    def extract_data(result) -> tuple:
-        if result:
-            return result['title'], result['displayLink']
-        return None, None
+        self.title = result['title']
+        self.url = result['url']
+        self.number_of_pages = result['number_of_pages']
+        if 'cover' in result:
+            self.cover_s = result['cover']['small']
+            self.cover_l = result['cover']['large']
+            self.cover_m = result['cover']['medium']
+        self.authors = []
+        for a in result['authors']:
+            self.authors.append(Author(a))
 
     def __str__(self):
-        return u'{}\n{}\n{}\n{}\n{}\n'.format(
-            self.url,
-            self.title,
-            self.isbn.url_google_q,
-            self.isbn.number,
-            self.img_url,
-        )
+        return u'{title}\n{isbn}\n{url}\n'.format(
+                url=self.url,
+                title=self.title,
+                isbn=self.isbn.number)
 
     def __repr__(self):
         return self.__str__()
 
     @property
     def dic(self):
-        return {
-            'isbn': self.isbn.number,
-            'title': self.title,
-            'url': self.url,
-            'img_url': self.img_url
-        }
+        return self.__dict__
