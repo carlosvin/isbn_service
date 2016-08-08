@@ -98,7 +98,7 @@ class Resource(object):
     def on_get(self, req, resp, isbn, formatter):
         resp.content_type = req.content_type
         if isbn in self.storage:
-            resp.body = formatter.format(self.storage[isbn])
+            resp.body = formatter.__class__(self.storage[isbn]).format()
             resp.status = falcon.HTTP_OK
         else:
             resp.status = falcon.HTTP_NOT_FOUND
