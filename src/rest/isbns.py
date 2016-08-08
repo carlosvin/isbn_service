@@ -20,15 +20,11 @@ RE_DIGIT = re.compile("\d+")
 
 
 def get_formatter(req, resp, params):
-    if req.content_type:
-        if req.content_type in types.FORMATTERS:
-            logging.info('Invalid content type %s' % req.content_type)
-            params['formatter'] = types.FORMATTERS[req.content_type]
-        else:
-            params['formatter'] = types.FORMATTERS[types.RST]
-    else:
+    try:
+        params['formatter'] = types.FORMATTERS[req.content_type]
+    except KeyError:
+        logging.info('Invalid content type %s' % req.content_type)
         params['formatter'] = types.FORMATTERS[types.RST]
-
 
 def get_valid_isbn(req, resp, params):
     logging.debug(params)
@@ -98,7 +94,7 @@ class Resource(object):
     def on_get(self, req, resp, isbn, formatter):
         resp.content_type = req.content_type
         if isbn in self.storage:
-            resp.body = formatter.__class__(self.storage[isbn]).format()
+            resp.body = formatter.format(self.storage[isbn])
             resp.status = falcon.HTTP_OK
         else:
             resp.status = falcon.HTTP_NOT_FOUND
