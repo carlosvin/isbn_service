@@ -1,4 +1,5 @@
 import json
+import logging
 import re
 from functools import reduce
 import falcon
@@ -19,16 +20,18 @@ RE_DIGIT = re.compile("\d+")
 
 
 def get_formatter(req, resp, params):
-    if req.content_type and req.content_type not in types.FORMATTERS:
-        raise falcon.HTTPBadRequest('Bad request', 'Content type {} not allowed, expected {}'.format(req.content_type,
-                                                                                                     types.FORMATTERS.keys()))
     if req.content_type:
-        params['formatter'] = types.FORMATTERS[req.content_type]
+        if req.content_type in types.FORMATTERS:
+            logging.info('Invalid content type %s' % req.content_type)
+            params['formatter'] = types.FORMATTERS[req.content_type]
+        else:
+            params['formatter'] = types.FORMATTERS[types.RST]
     else:
-        params['formatter'] = types.FORMATTERS[types.JSON]
+        params['formatter'] = types.FORMATTERS[types.RST]
 
 
 def get_valid_isbn(req, resp, params):
+    logging.debug(params)
     isbn = get_isbn_input(req, params)
     if is_valid(isbn):
         params['isbn'] = isbn
@@ -67,13 +70,16 @@ class Collection(object):
 
     @falcon.before(get_valid_isbn)
     def on_post(self, req, resp, isbn):
-        book = isbn_scrapper.Isbn(isbn).request_book()
-        if book:
-            self.storage[isbn] = book
-            resp.status = falcon.HTTP_CREATED
-            resp.location = '{}/{}'.format(req.path, isbn)
+        resp.location = '{}/{}'.format(req.path, isbn)
+        if isbn in self.storage:
+            resp.status = falcon.HTTP_OK
         else:
-            resp.status = falcon.HTTP_500
+            book = isbn_scrapper.Isbn(isbn).request_book()
+            if book:
+                self.storage[isbn] = book
+                resp.status = falcon.HTTP_CREATED
+            else:
+                resp.status = falcon.HTTP_404
 
     def on_get(self, req, resp):
         resp.status = falcon.HTTP_OK

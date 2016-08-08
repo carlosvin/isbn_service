@@ -1,15 +1,17 @@
+import requests
+
 __author__ = 'carlos'
 
 import urllib.request, json, socket, re
 
 
 class WsUrl:
-    IMG_TEMPLATE = 'https://www.googleapis.com/customsearch/v1?q={}&searchType=image'
-    TEMPLATE = 'https://www.googleapis.com/customsearch/v1?q={}'
+    TEMPLATE = 'https://www.googleapis.com/customsearch/v1'
     QUERY_TEMPLATE = 'https://google.com?q={}'
 
-
 FORMATS = ('rst', 'html')
+API_KEY = 'AIzaSyDjSV54P5BpXojvY_5NPF-R9LkpRGk23WQ'
+SEARCH_ENG_ID = '016672377533739393798:9mzqieqaeji'
 
 DEFAULT_USER_IP = socket.gethostbyname(socket.gethostname())
 
@@ -19,25 +21,16 @@ class Isbn:
         self.number = number
         self.len = len(str(number))
 
-    @property
-    def url_img(self):
-        return WsUrl.IMG_TEMPLATE.format(self.number, DEFAULT_USER_IP)
-
-    @property
-    def url(self):
-        return WsUrl.TEMPLATE.format(self.number, DEFAULT_USER_IP)
 
     @property
     def url_google_q(self):
         return WsUrl.QUERY_TEMPLATE.format(self.number)
 
-    def request_book(self, referer=DEFAULT_USER_IP):
-        request = urllib.request.Request(self.url, headers={'Referer': referer})
-        request_img = urllib.request.Request(self.url_img, headers={'Referer': referer})
-        with urllib.request.urlopen(request) as f:
-            result = json.loads(f.read().decode('utf-8'))
-        with urllib.request.urlopen(request_img) as f:
-            result_img = json.loads(f.read().decode('utf-8'))
+    def request_book(self):
+        result = requests.get('https://www.googleapis.com/customsearch/v1', params={'key': API_KEY, 'q': self.number, 'cx': SEARCH_ENG_ID})
+        result = json.loads(result.text)
+        result_img = requests.get('https://www.googleapis.com/customsearch/v1', params={'key': API_KEY, 'q': self.number, 'searchType': 'image', 'cx': SEARCH_ENG_ID})
+        result_img = json.loads(result_img.text)
         return Book(self, result, result_img)
 
     def __len__(self):
