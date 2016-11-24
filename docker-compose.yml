@@ -1,19 +1,12 @@
-#redis:
-#  restart: always
-#  image: redis:latest
-#  ports:
-#    - "6379:6379"
 
 isbn_service1:
   restart: always
   build: src
-  #links:
-  #  - redis
   expose:
     - "8000"
   command: "gunicorn rest.srv -w 2 -b :8000 --pythonpath /usr/isbn"
-  volumes:
-    - .:/usr/isbn
+  environment:
+    VIRTUAL_HOST:  a.domain.com
 
 web:
   restart: always
@@ -21,14 +14,16 @@ web:
   volumes:
     - /usr/share/isbn/
   command: tail -f /dev/null
+  environment:
+    VIRTUAL_HOST:  b.domain.com
 
-nginx:
-  restart: always
-  build: nginx
-  links:
-    - isbn_service1:isbn_service1
-    - web:web
+nginx-proxy:
+  image: jwilder/nginx-proxy
   ports:
     - "80:80"
-  volumes_from:
-    - web
+    - "8080:8080"
+    - "443:443"
+  volumes:
+    - /var/run/docker.sock:/tmp/docker.sock:ro
+  restart: always
+  privileged: true
