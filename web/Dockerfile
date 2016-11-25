@@ -1,19 +1,22 @@
-FROM httpd:2.4
-
-#FROM google/dart
+FROM google/dart
 
 MAINTAINER Carlos Martin <carlosvin@gmail.com>
 
-# Enable HTTPS for apt.
+ENV SERVER /usr/share/nginx/www/
+ENV OUTPUT /tmp/output
+
 RUN apt-get update
-RUN apt-get install apt-transport-https
-# Get the Google Linux package signing key.
-RUN sh -c 'curl https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -'
-# Set up the location of the stable repository.
-RUN sh -c 'curl https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list'
-RUN apt-get update
-RUN apt-get install dart
+RUN apt-get -y install nginx
+
 WORKDIR /tmp
-ADD . .
-RUN pub upgrade
-RUN pub build --mode=release --all --output=/usr/share/isbn/
+ADD pubspec.yaml .
+ADD web web
+RUN pub upgrade && pub build --mode=release --all --output=$OUTPUT
+RUN mv $OUTPUT/web/* $SERVER
+
+# forward request and error logs to docker log collector
+RUN ln -sf /dev/stdout /var/log/nginx/access.log && ln -sf /dev/stderr /var/log/nginx/error.log
+
+EXPOSE 80 443
+
+CMD ["nginx", "-g", "daemon off;"]

@@ -11,7 +11,7 @@ main() async {
 }
 
 void loadData() {
-  var url = "http://a.domain.com/rest/isbns";
+  var url = "http://a.domain.com/isbns";
 
   querySelector('#info').text = url;
 

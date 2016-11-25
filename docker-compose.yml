@@ -2,18 +2,12 @@
 isbn_service1:
   restart: always
   build: src
-  expose:
-    - "8000"
-  command: "gunicorn rest.srv -w 2 -b :8000 --pythonpath /usr/isbn"
   environment:
     VIRTUAL_HOST:  a.domain.com
 
 web:
   restart: always
   build: web
-  volumes:
-    - /usr/share/isbn/
-  command: tail -f /dev/null
   environment:
     VIRTUAL_HOST:  b.domain.com
 
@@ -21,7 +15,6 @@ nginx-proxy:
   image: jwilder/nginx-proxy
   ports:
     - "80:80"
-    - "8080:8080"
     - "443:443"
   volumes:
     - /var/run/docker.sock:/tmp/docker.sock:ro
