@@ -64,19 +64,6 @@ class Collection(object):
     def __init__(self, storage):
         self.storage = storage
 
-    @falcon.before(get_valid_isbn)
-    def on_post(self, req, resp, isbn):
-        resp.location = '{}/{}'.format(req.path, isbn)
-        if isbn in self.storage:
-            resp.status = falcon.HTTP_OK
-        else:
-            book = isbn_scrapper.Isbn(isbn).request_book()
-            if book:
-                self.storage[isbn] = book
-                resp.status = falcon.HTTP_CREATED
-            else:
-                resp.status = falcon.HTTP_404
-
     def on_get(self, req, resp):
         resp.status = falcon.HTTP_OK
         astr = ''
@@ -104,4 +91,10 @@ class Resource(object):
         if isbn in self.storage:
             resp.status = falcon.HTTP_OK
         else:
-            resp.status = falcon.HTTP_NOT_FOUND
+            resp.location = '{}/{}'.format(req.path, isbn)
+            book = isbn_scrapper.Isbn(isbn).request_book()
+            if book:
+                self.storage[isbn] = book
+                resp.status = falcon.HTTP_CREATED
+            else:
+                resp.status = falcon.HTTP_NOT_FOUND
