@@ -1,8 +1,6 @@
-import requests
+import json, socket, re, requests
 
 __author__ = 'carlos'
-
-import urllib.request, json, socket, re
 
 
 class WsUrl:

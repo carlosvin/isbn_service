@@ -1,15 +1,18 @@
-import json
-import logging
-import re
-from functools import reduce
-import falcon
-from format import types
-from scrapper import isbn_scrapper
-
 """
 For now we'll only accept 13 digits isbns
 In the future, when we receive 10 digits we will convert it
 """
+
+from functools import reduce
+import json
+import logging
+import re
+
+import falcon
+
+from isbn.formatters import FORMATTERS, Formats
+from isbn import scrapper
+
 
 MIN_10 = 999999999
 MAX_10 = 9999999999
@@ -21,10 +24,11 @@ RE_DIGIT = re.compile("\d+")
 
 def get_formatter(req, resp, params):
     try:
-        params['formatter'] = types.FORMATTERS[req.content_type]
+        params['formatter'] = FORMATTERS[req.content_type]
     except KeyError:
         logging.info('Invalid content type %s' % req.content_type)
-        params['formatter'] = types.FORMATTERS[types.RST]
+        params['formatter'] = FORMATTERS[Formats.RST]
+
 
 def get_valid_isbn(req, resp, params):
     logging.debug(params)
@@ -92,7 +96,7 @@ class Resource(object):
             resp.status = falcon.HTTP_OK
         else:
             resp.location = '{}/{}'.format(req.path, isbn)
-            book = isbn_scrapper.Isbn(isbn).request_book()
+            book = scrapper.Isbn(isbn).request_book()
             if book:
                 self.storage[isbn] = book
                 resp.status = falcon.HTTP_CREATED
