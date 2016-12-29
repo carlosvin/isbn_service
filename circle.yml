@@ -11,7 +11,7 @@ dependencies:
 
 test:
   override:
-    - make test
+    - python -m unittest discover
   #post:
   #  - docker run -d -p 8000:8000 -e carlosvin/isbn_service:$CIRCLE_SHA1; sleep 10
   #  - http PUT http://localhost:8000/isbns/9788499925752
