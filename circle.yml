@@ -6,15 +6,20 @@ machine:
 dependencies:
   override:
     - pip install requests
-    - docker build -t carlosvin/isbn_service:$CIRCLE_SHA1 src
+    - pip install httpie
+    - docker build -t carlosvin/isbn_service:$CIRCLE_SHA1 .
 
 test:
   override:
-    - docker run -i -t --entrypoint=./test.sh carlosvin/isbn_service:$CIRCLE_SHA1
+    - make test
+  #post:
+  #  - docker run -d -p 8000:8000 -e carlosvin/isbn_service:$CIRCLE_SHA1; sleep 10
+  #  - http PUT http://localhost:8000/isbns/9788499925752
 
-deployment:
-  hub:
-    branch: docker-16
-    commands:
-      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-      - docker push carlosvin/isbn_service
+
+#deployment:
+#  hub:
+#    branch: docker-16
+#    commands:
+#      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+#      - docker push carlosvin/isbn_service

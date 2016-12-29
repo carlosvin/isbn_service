@@ -2,7 +2,7 @@ init:
     pip install -r requirements.txt
 
 test:
-    py.test tests
+    python -m unittest discover
     
 dist:
 	python setup.py sdist
